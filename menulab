@@ -1,0 +1,24 @@
+#!/bin/bash
+
+PS3='Enter your choice: '
+options=("See Disk space" "List current directory" "List current users" "Quit")
+
+trap "ignoring ctrl-c" SIGINT
+select opt in "${options[@]}"
+do
+	case $opt in
+		"See Disk space")
+			df -m
+			;;
+		"List current directory")
+			ls
+			;;
+		"List current users")
+			whoami
+			;;
+		"Quit")
+			break
+			;;
+		*) echo "invalid option $REPLY";;
+	esac
+done
