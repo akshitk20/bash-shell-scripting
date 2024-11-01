@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# set variables to contain values
+DISKFREE=$(df -m | grep '/$' | awk '{print $4}')
+#MEMFREE=$(free -m | grep Mem | awk '{print $4}')
+MEMFREE=256
+#echo $DISKFREE
+#echo $MEMFREE
+
+# check if disk and memory are low
+if [ $DISKFREE -le $(( 1024 * 3 )) ] && [ $MEMFREE -le 512 ]
+then
+	echo WARNING
+
+# check if only disk is low
+elif [ $DISKFREE -le $(( 1024 * 3)) ]
+then
+	echo WARNING Disk is less
+
+# check if only memory is low
+elif [ $MEMFREE -le 512 ]
+then
+	echo WARNING Memory is less
+
+# print message if all is good
+else
+	echo Everything is good
+fi
+

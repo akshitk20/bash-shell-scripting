@@ -1,0 +1,34 @@
+#!/bin/bash
+
+count=0
+
+function no_int()
+{
+	let count++
+	echo
+	if [[ $count == 1 ]]; then
+		echo "Don't do that."
+	elif [[ $count == 2 ]]; then
+		echo "If you are sure do it once more"
+	else
+		echo "Okay, bye."
+		exit
+	fi
+}
+
+function countdown()
+{
+	counter=1000
+	while true; do
+		counter=$(( counter - 1 ))
+		sleep 1
+		echo counter is now $counter
+	done
+}
+
+# define the trap that reacts on ctrl-c
+trap no_int INT
+
+# run the command on something that will be restarted after receiving SIGINT
+countdown
+

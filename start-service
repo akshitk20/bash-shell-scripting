@@ -1,0 +1,22 @@
+#!/bin/bash
+
+if [ -z $1 ]
+then
+	echo please enter arguments
+fi
+
+DISKFREE=$(df -m | grep '/$' | awk '{print $4}')
+echo $DISKFREE
+
+if [ $DISKFREE -lt 256 ]
+then
+	echo low disk space
+
+fi
+
+sudo echo apt get install -y "$@"
+
+for i in "$@"
+do
+	sudo echo systemctl enable --now $i
+done 	
