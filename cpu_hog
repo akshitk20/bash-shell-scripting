@@ -1,0 +1,39 @@
+#!/bin/bash
+# script that monitors the top active process. the script sends and email to the user root if
+# utilization of top active process goes beyond 80% 
+
+while true
+do
+	# check every 60 seconds if we have process causing high CPU load
+	sleep 6
+	#USAGE=`ps -eo pcpu,pid -o comm= | sort -k1 -n -r | head -1 | awk '{print $1}'`
+	PINFO=`ps -eo pcpu,pid -o comm= | sort -k1 -n -r | head -1`
+	USAGE=`echo $PINFO | awk '{print $1}'`
+	USAGE=${USAGE%.*}
+	PID=`echo $PINFO | awk '{print $2}'`
+	PNAME=`echo $PINFO | awk '{print $3}'`
+	#PID=`ps -eo pcpu,pid -o comm= | sort -k1 -n -r | head -1 | awk '{print $2}'`
+	#PNAME=`ps -eo pcpu,pid -o comm= | sort -k1 -n -r | head -1 | awk '{print $3}'`
+	
+	# only if we have high CPU load on one process run a check in 7 seconds
+	# in this check we should monitor if the process is still that active
+	# if thats the case root gets a message
+	if [ $USAGE -gt 80 ]
+	then	
+		USAGE1=$USAGE
+		PID1=$PID
+		PNAME1=$PNAME
+
+		PINFO2=`ps -eo pcpu,pid -o comm= | sort -k1 -n -r | head -1`
+        	USAGE2=`echo $PINFO2 | awk '{print $1}'`
+        	USAGE2=${USAGE2%.*}
+        	PID2=`echo $PINFO2 | awk '{print $2}'`
+        	PNAME2=`echo $PINFO2 | awk '{print $3}'`
+
+		#USAGE2=`ps -eo pcpu,pid -o comm= | sort -k1 -n -r | head -1 | awk '{print $1}'`
+		#USAGE2=${USAGE2%.*}
+		#PID2=`ps -eo pcpu,pid -o comm= | sort -k1 -n -r | head -1 | awk '{print $2}'`
+		#PNAME2=`ps -eo pcpu,pid -o comm= | sort -k1 -n -r | head -1 | awk '{print $3}'`
+		[ $USAGE2 -gt 80 ] && [ $PID1 = $PID2 ] && echo HIGH CPU UTILIZATION ON $PNAME
+	fi
+done	    
