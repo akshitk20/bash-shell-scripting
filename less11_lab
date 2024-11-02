@@ -1,0 +1,25 @@
+#!/bin/bash
+
+echo Enter name for monday
+read monday
+echo Enter name for tuesday
+read tuesday
+echo Enter name for wednesday
+read wednesday
+echo Enter name for thursday
+read thursday
+echo Enter name for friday
+read friday
+
+declare -A roster
+roster[monday]=$monday
+roster[tuesday]=$tuesday
+roster[wednesday]=$wednesday
+roster[thursday]=$thursday
+roster[friday]=$friday
+
+# print the names 
+for i in "${!roster[@]}"
+do
+	echo "$i" "${roster[$i]}"
+done
